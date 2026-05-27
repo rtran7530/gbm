@@ -16,6 +16,23 @@ import numpy as np
 
 
 # ---------------------------------------------------------------------------
+# Rebalancing Frequency Constants
+# ---------------------------------------------------------------------------
+# All values assume n_steps=252 (one trading year).  Pass an integer directly
+# if your simulation uses a different step count.
+
+REBAL_FREQ: dict[str, Optional[int]] = {
+    "daily":      1,
+    "weekly":     5,
+    "monthly":   21,
+    "quarterly": 63,
+    "semiannual": 126,
+    "annual":    252,
+    "never":    None,
+}
+
+
+# ---------------------------------------------------------------------------
 # Validation Helpers
 # ---------------------------------------------------------------------------
 
