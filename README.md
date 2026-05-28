@@ -117,8 +117,8 @@ The segment-based approach:
 boundaries = [0, rebal_steps, 2*rebal_steps, ..., n_steps]
 
 for each segment [a, b]:
-    seg_pv = (shares * prices[:, :, a:b+1]).sum(axis=1)  ← vectorised over all paths
-    update shares at b                                    ← vectorised over all paths
+    seg_pv = (shares * prices[:, :, a:b+1]).sum(axis=1)  ← vectorized over all paths
+    update shares at b                                    ← vectorized over all paths
 ```
 
 The loop iterates over rebalancing events (4 for quarterly), not over paths (1,000,000) or steps (252).
