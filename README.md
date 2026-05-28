@@ -40,7 +40,7 @@ Each asset $i$ evolves according to the stochastic differential equation:
 
 $$dS_i(t) = \mu_i S_i(t)\, dt + \sigma_i S_i(t)\, dW_i(t)$$
 
-where $\mu_i$ is the annualised drift, $\sigma_i$ is the annualised volatility, and $W_i(t)$ is a standard Wiener process. The exact discrete solution over a timestep $\Delta t = T / N$ is:
+where $\mu_i$ is the annualized drift, $\sigma_i$ is the annualized volatility, and $W_i(t)$ is a standard Wiener process. The exact discrete solution over a timestep $\Delta t = T / N$ is:
 
 $$S_i(t + \Delta t) = S_i(t) \cdot \exp\!\left[\left(\mu_i - \tfrac{1}{2}\sigma_i^2\right)\Delta t + \sigma_i \sqrt{\Delta t}\, Z_i\right]$$
 
@@ -219,8 +219,8 @@ print(f"Barrier breach: {risk.barrier_breach * 100:.3f}%")
 | Field | Type | Description |
 |---|---|---|
 | `S0` | `array (n,)` | Initial asset prices |
-| `mu` | `array (n,)` | Annualised drift rates |
-| `sigma` | `array (n,)` | Annualised volatilities |
+| `mu` | `array (n,)` | Annualized drift rates |
+| `sigma` | `array (n,)` | Annualized volatilities |
 | `weights` | `array (n,)` | Fractional allocation weights; must sum to 1.0 |
 | `rho` | `array (n, n)` | Correlation matrix; symmetric, PSD, unit diagonal |
 | `T` | `float` | Simulation horizon in years |
@@ -282,7 +282,7 @@ The figure is automatically generated during `benchmark()` using Matplotlib (Agg
 </p>
 
 - **Panel 1** — 100 randomly sampled portfolio trajectories with analytical mean and risk barrier  
-- **Panel 2** — Normalised asset price dynamics (S / S₀)  
+- **Panel 2** — Normalized asset price dynamics (S / S₀)  
 - **Panel 3** — Terminal portfolio distribution with VaR and CVaR
 
 ---
