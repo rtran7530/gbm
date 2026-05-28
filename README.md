@@ -20,18 +20,6 @@ Each stage is fully vectorized. No Python loops iterate over paths or timesteps.
 
 ---
 
-## Example Output
-
-A single Monte Carlo experiment yields the joint stochastic system:
-$$S(t) \in \mathbb{R}^n,\quad V(t) \in \mathbb{R},\quad L = V_0 - V(T)$$
-
-From this realization, the simulator evaluates:
-$$\mathbb{E}[V(t)], \quad \mathrm{Var}(V(t)), \quad \mathrm{VaR}_\alpha(L), \quad \mathrm{CVaR}_\alpha(L)$$
-
-under correlated Geometric Brownian Motion, where the cross-asset structure is defined by a Cholesky factorization of the correlation matrix.
-
----
-
 ## Mathematical Foundations
 
 ### Geometric Brownian Motion
