@@ -20,6 +20,18 @@ Each stage is fully vectorized. No Python loops iterate over paths or timesteps.
 
 ---
 
+## Example Output
+
+A single Monte Carlo experiment yields the joint stochastic system:
+$$S(t) \in \mathbb{R}^n,\quad V(t) \in \mathbb{R},\quad L = V_0 - V(T)$$
+
+From this realization, the simulator evaluates:
+$$\mathbb{E}[V(t)], \quad \mathrm{Var}(V(t)), \quad \mathrm{VaR}_\alpha(L), \quad \mathrm{CVaR}_\alpha(L)$$
+
+under correlated Geometric Brownian Motion, where the cross-asset structure is defined by a Cholesky factorization of the correlation matrix.
+
+---
+
 ## Mathematical Foundations
 
 ### Geometric Brownian Motion
@@ -261,13 +273,17 @@ All values assume `n_steps=252`. For non-standard step counts, compute the equiv
     Barrier    :      0.51%  of paths breached 75% barrier
 ```
 
-### Plot (`simulation_results.png`)
+### Visualization Plot (`simulation_results.png`)
 
-Three-panel figure saved at 150 DPI via the headless Agg backend (safe on servers without a display):
+The figure is automatically generated during `benchmark()` using Matplotlib (Agg backend) and saved as:
 
-- **Panel 1** — 100 randomly sampled portfolio value trajectories (semi-transparent) with the analytical mean path and the 75% barrier level.
-- **Panel 2** — Per-asset normalised paths (price / S0) with per-asset analytical means, enabling direct comparison across assets with different price scales.
-- **Panel 3** — Terminal portfolio value distribution with VaR and CVaR thresholds marked.
+<p align="center">
+  <img src="simulation_results.png" alt="GBM Portfolio Simulation" width="900"/>
+</p>
+
+- **Panel 1** — 100 randomly sampled portfolio trajectories with analytical mean and risk barrier  
+- **Panel 2** — Normalised asset price dynamics (S / S₀)  
+- **Panel 3** — Terminal portfolio distribution with VaR and CVaR
 
 ---
 
@@ -290,4 +306,4 @@ Under heavy workloads, the simulation's performance is limited by memory bandwid
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
