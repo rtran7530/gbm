@@ -32,7 +32,7 @@ where $\mu_i$ is the annualized drift, $\sigma_i$ is the annualized volatility, 
 
 $$S_i(t + \Delta t) = S_i(t) \cdot \exp\!\left[\left(\mu_i - \tfrac{1}{2}\sigma_i^2\right)\Delta t + \sigma_i \sqrt{\Delta t}\, Z_i\right]$$
 
-where $Z_i \sim \mathcal{N}(0, 1)$. This is the Itô-correct form; the $-\frac{1}{2}\sigma^2$ adjustment converts the log-normal drift so that $\mathbb{E}[S_i(t)] = S_{0,i}\, e^{\mu_i t}$.
+where $Z_i \sim \mathcal{N}(0, 1)$. This is the Itô-correct form. The $-\frac{1}{2}\sigma_i^2$ term corrects for the convexity of the exponential under the log-normal distribution, ensuring $\mathbb{E}[S_i(t)] = S_{0,i}\, e^{\mu_i t}$. Without it, the simulated paths would have a systematically high mean.
 
 ### Correlated Shocks via Cholesky Decomposition
 
