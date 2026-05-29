@@ -1,5 +1,5 @@
 """
-Multi-Asset GBM Portfolio Simulator
+Driftline — High-Performance GBM Portfolio Simulator
 ====================================
 A vectorized simulation engine designed to project multi-asset pathways under
 correlated market conditions using geometric Brownian motion, with optional

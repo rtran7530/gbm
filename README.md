@@ -1,6 +1,6 @@
-# GBM Portfolio Simulator
+# Driftline — High-Performance GBM Portfolio Simulator
 
-A high-performance Monte Carlo simulation engine for multi-asset portfolios under correlated Geometric Brownian Motion. Designed to generate over one million price paths with full matrix vectorization, parallel execution, and optional periodic rebalancing.
+Driftline is a high-performance Monte Carlo simulation engine for multi-asset portfolios under correlated Geometric Brownian Motion. It generates over one million price paths using fully vectorized matrix operations, with optional periodic rebalancing.
 
 ---
 
