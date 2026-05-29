@@ -12,9 +12,16 @@ from dataclasses import dataclass, field
 from multiprocessing import cpu_count
 from multiprocessing.pool import ThreadPool
 from typing import Optional
+from pathlib import Path
 
 import numpy as np
 
+# ---------------------------------------------------------------------------
+# Assets output directory
+# ---------------------------------------------------------------------------
+
+ASSETS_DIR = Path("assets")
+ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
 # Rebalancing Frequency Constants
@@ -59,7 +66,7 @@ def _validate_params(p: "GBMParams") -> None:
     eigvals = np.linalg.eigvalsh(p.rho)
     if np.any(eigvals < -1e-8):
         raise ValueError("Correlation matrix must be positive semi-definite")
-    if not np.all(np.diag(p.rho) == 1.0):
+    if not np.allclose(np.diag(p.rho), 1.0):
         raise ValueError("Correlation matrix diagonal must equal 1.0")
     w_sum = np.sum(p.weights)
     if not np.isclose(w_sum, 1.0):
@@ -365,9 +372,10 @@ def plot_simulation(
     portfolio_values: np.ndarray,
     params:           GBMParams,
     risk:             RiskMetrics,
-    save_path:        str = "simulation_results.png",
+    save_path:        str | Path = ASSETS_DIR / "simulation_results.png",
     n_sample:         int = 100,
 ) -> None:
+    
     """
     Three-panel report saved to disk (headless, Agg backend).
 
@@ -504,10 +512,15 @@ def plot_simulation(
         fontsize=8, ncol=4,
     )
     ax_dist.xaxis.set_major_formatter(mticker.FormatStrFormatter("$%.0f"))
-
+    
+    save_path = Path(save_path)
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+    
     plt.savefig(
-        save_path, dpi=150,
-        bbox_inches="tight", facecolor=fig.get_facecolor(),
+        save_path,
+        dpi=150,
+        bbox_inches="tight",
+        facecolor=fig.get_facecolor(),
     )
     plt.close(fig)
     print(f"  Plot saved → {save_path}")
@@ -737,6 +750,7 @@ def benchmark(
             last_result.portfolio_values,
             params,
             risk,
+            save_path = ASSETS_DIR / "simulation_results.png",
         )
 
     print(f"{sep2}\n")

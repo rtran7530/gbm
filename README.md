@@ -266,7 +266,7 @@ All values assume `n_steps=252`. For non-standard step counts, compute the equiv
 The figure is automatically generated during `benchmark()` using Matplotlib (Agg backend) and saved as:
 
 <p align="center">
-  <img src="simulation_results.png" alt="GBM Portfolio Simulation" width="900"/>
+  <img src="./assets/simulation_results.png" alt="GBM Portfolio Simulation" width="900"/>
 </p>
 
 - **Panel 1** — 100 randomly sampled portfolio trajectories with analytical mean and risk barrier  
