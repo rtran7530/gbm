@@ -294,4 +294,4 @@ Under heavy workloads, the simulation's performance is limited by memory bandwid
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
