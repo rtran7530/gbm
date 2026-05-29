@@ -95,8 +95,8 @@ class GBMParams:
     Parameters
     ----------
     S0          : (n_assets,) initial asset prices
-    mu          : (n_assets,) annualised drift rates
-    sigma       : (n_assets,) annualised volatilities
+    mu          : (n_assets,) annualized drift rates
+    sigma       : (n_assets,) annualized volatilities
     weights     : (n_assets,) portfolio allocation weights, must sum to 1.0
     rho         : (n_assets, n_assets) asset correlation matrix
     T           : simulation horizon in years
@@ -171,7 +171,7 @@ def _worker(args: tuple) -> np.ndarray:
     Generate a slice of correlated multi-asset GBM price paths.
 
     Rebalancing is a portfolio-management decision applied during aggregation.
-    Asset prices follow GBM regardless of investor behaviour, so this function
+    Asset prices follow GBM regardless of investor behavior, so this function
     is identical with or without rebalancing enabled.
 
     Returns
@@ -194,8 +194,8 @@ def _worker(args: tuple) -> np.ndarray:
     # Correlate via Cholesky: Z @ L.T is a single BLAS gemm over the asset axis
     Z_corr = Z @ params.L.T                                    # (paths, steps, n_assets)
 
-    # Log-return increments; transpose to (paths, n_assets, steps)
-    increments = np.exp(drift + diffusion * Z_corr, dtype=params.dtype)
+    # GBM multiplicative price increments
+    increments = np.exp(drift + diffusion * Z_corr).astype(params.dtype)
     increments = increments.transpose(0, 2, 1)
 
     # Prepend S0 and take cumulative product along the time axis
@@ -224,12 +224,12 @@ def compute_portfolio_values(
     -------------------
     Share holdings are fixed at t=0:  shares_i = w_i * V_0 / S0_i
     V(t) = sum_i( shares_i * P_i(t) )
-    Implemented as a single vectorised broadcast + sum — one pass, no Python loop.
+    Implemented as a single vectorized broadcast + sum — one pass, no Python loop.
 
     With rebalancing (rebal_steps is not None)
     ------------------------------------------
     The timeline is divided into segments at each rebalancing date.  Within a
-    segment, holdings are constant, so portfolio value is fully vectorised
+    segment, holdings are constant, so portfolio value is fully vectorized
     across all paths.  At segment boundaries the share holdings are updated:
 
         shares_i_new = w_i * V(t_r) / P_i(t_r)
@@ -253,7 +253,7 @@ def compute_portfolio_values(
     n_paths, n_assets, n_timepoints = asset_paths.shape
     V0 = params.initial_portfolio_value
 
-    # ── No rebalancing: single-pass vectorised aggregation ───────────────
+    # ── No rebalancing: single-pass vectorized aggregation ───────────────
     if params.rebal_steps is None:
         allocs = (params.weights / params.S0).astype(np.float64)
         pv = (
@@ -261,7 +261,7 @@ def compute_portfolio_values(
         ).sum(axis=1)
         return (pv * V0).astype(params.dtype)
 
-    # ── Rebalancing: segment-by-segment, vectorised within each segment ──
+    # ── Rebalancing: segment-by-segment, vectorized within each segment ──
     # Initial share holdings: all paths start identically
     shares = np.tile(
         (params.weights * V0 / params.S0).astype(np.float64),
@@ -325,7 +325,7 @@ class RiskMetrics:
 
 def compute_risk(portfolio_values: np.ndarray, params: GBMParams) -> RiskMetrics:
     """
-    Vectorised portfolio-level risk metrics. Zero Python loops.
+    Vectorized portfolio-level risk metrics. Zero Python loops.
 
     VaR_alpha  = percentile(losses, alpha * 100)
     CVaR_alpha = mean( losses[ losses >= VaR_alpha ] )
@@ -380,10 +380,10 @@ def plot_simulation(
     Three-panel report saved to disk (headless, Agg backend).
 
     Panel 1 : 100 sampled portfolio value paths, analytical mean, 75% barrier.
-    Panel 2 : Per-asset normalised paths (P / S0) with per-asset analytical means.
+    Panel 2 : Per-asset normalized paths (P / S0) with per-asset analytical means.
     Panel 3 : Terminal portfolio value histogram with VaR / CVaR markers.
 
-    Path sampling uses a single vectorised fancy-index; no Python loop.
+    Path sampling uses a single vectorized fancy-index; no Python loop.
     rasterized=True on dense trajectory layers keeps the file size manageable.
     """
     import matplotlib
@@ -458,13 +458,13 @@ def plot_simulation(
     ax_port.legend(facecolor=SURFACE, edgecolor=BORDER, labelcolor=TEXT, fontsize=9)
     ax_port.yaxis.set_major_formatter(mticker.FormatStrFormatter("$%.0f"))
 
-    # ── Panel 2: Per-asset normalised paths ─────────────────────────────
+    # ── Panel 2: Per-asset normalized paths ─────────────────────────────
     for i in range(params.n_assets):
         colour       = _ASSET_COLOURS[i % len(_ASSET_COLOURS)]
         asset_sample = asset_paths[idx, i, :]
-        normalised   = asset_sample / params.S0[i].astype(params.dtype)
+        normalized   = asset_sample / params.S0[i].astype(params.dtype)
         ax_assets.plot(
-            t_axis, normalised.T,
+            t_axis, normalized.T,
             color=colour, alpha=0.20, linewidth=0.55, rasterized=True,
         )
         ax_assets.plot(
@@ -475,11 +475,11 @@ def plot_simulation(
 
     ax_assets.axhline(1.0, color=BORDER, linewidth=0.8, linestyle=":")
     ax_assets.set_title(
-        "Per-Asset Normalised Paths  (Price / S₀)",
+        "Per-Asset Normalized Paths  (Price / S₀)",
         color=TEXT, fontsize=10, pad=8,
     )
     ax_assets.set_xlabel("Time (years)", color=MUTED, fontsize=9)
-    ax_assets.set_ylabel("Normalised Price", color=MUTED, fontsize=9)
+    ax_assets.set_ylabel("Normalized Price", color=MUTED, fontsize=9)
     ax_assets.legend(
         facecolor=SURFACE, edgecolor=BORDER, labelcolor=TEXT,
         fontsize=8, ncol=params.n_assets,
